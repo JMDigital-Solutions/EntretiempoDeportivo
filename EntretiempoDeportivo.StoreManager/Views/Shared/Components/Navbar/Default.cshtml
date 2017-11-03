@@ -1,0 +1,29 @@
+﻿@model EntretiempoDeportivo.StoreManager.Models.NavbarViewModel
+
+<ul id="nav-mobile" class="side-nav fixed z-depth-3">
+    <li><a class="subheader">Operaciones</a></li>
+    @foreach(var navItem in Model.NavbarLinks)
+    {
+        if(navItem.Section == NavbarSection.Operaciones)
+        {
+            <li class="@(navItem.IsActive ? " active" : "")">
+                <a class="waves-effect" asp-area="" asp-controller="@navItem.Controller" asp-action="@navItem.Action">
+                    <i class="material-icons">@navItem.DisplayIcon</i>@navItem.DisplayName
+                </a>
+            </li>
+        }
+    }
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Administraci&oacute;n</a></li>
+    @foreach (var navItem in Model.NavbarLinks)
+    {
+        if (navItem.Section == NavbarSection.Administracion)
+        {
+            <li class="@(navItem.IsActive ? " active" : "")">
+                <a class="waves-effect" asp-area="" asp-controller="@navItem.Controller" asp-action="@navItem.Action">
+                    <i class="material-icons">@navItem.DisplayIcon</i>@navItem.DisplayName
+                </a>
+            </li>
+        }
+    }
+</ul>

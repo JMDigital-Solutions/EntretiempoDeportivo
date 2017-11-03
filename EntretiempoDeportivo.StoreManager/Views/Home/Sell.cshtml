@@ -1,0 +1,51 @@
+﻿@model EntretiempoDeportivo.StoreManager.Models.InvoiceViewModel
+
+@{
+    ViewData["PageTitle"] = "Vender";
+}
+<div class="row">
+
+    <form id="frmAddProduct" onsubmit="SellingScripts.addProductToFinalSale(event);">
+        <div id="addProduct" class="container z-depth-3">
+            <div class="row">
+                <div class="input-field col s4">
+                    <input id="txtProductName" type="text" class="validate" name="Name">
+                    <label for="txtProductName">Art&iacute;culo</label>
+                </div>
+                <div class="input-field col s4">
+                    <input id="txtProductQtty" type="number" class="validate" name="Quantity" min="0" required>
+                    <label for="txtProductQtty">Cantidad</label>
+                </div>
+                <div class="input-field col s4">
+                    <input id="txtProductUnitPrice" type="text" class="validate" name="UnitPrice">
+                    <label for="txtProductUnitPrice">Precio unitario</label>
+                </div>
+            </div>
+
+            <div class="row">
+                @*<div class="input-field col s3">
+                    <select asp-for="PaymentMethod" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
+                    <label>Tipo de venta</label>
+                </div>*@
+            </div>
+            <div class="row">
+                <div class="col s12 right-align">
+                    <button id="btnAddProduct" class="btn waves-effect waves-light" type="reset">
+                        Limpiar
+                    </button>
+                    <button id="btnAddProduct" class="btn waves-effect waves-light" type="submit">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form id="frmProductGrid" class="col s12 center-align">
+        <div class="row">
+            <div class="col s12" id="product-list">
+                @await Component.InvokeAsync(nameof(InvoiceProductList), new { Model })
+            </div>
+        </div>
+    </form>
+</div>

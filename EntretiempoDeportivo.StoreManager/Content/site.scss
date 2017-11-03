@@ -1,38 +1,64 @@
-﻿/* Ensure layout covers the entire screen. */
-html {
+﻿html {
     height: 100%;
 }
 
-/* Stack toolbar and content on top of each other. */
-.demo-body {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    min-height: 100%;
+.container {
+    width: 90%;
 }
 
-/* Place drawer and main next to each other. */
-.demo-content {
-    display: flex;
-    flex: 1 1 auto;
-    height: 100%;
-    box-sizing: border-box;
+header {
+    padding-left: 300px;
+
+    nav.top-nav {
+        height: 122px;
+
+        a.page-title {
+            line-height: 122px;
+            font-size: 48px;
+        }
+    }
 }
 
-.demo-main {
-    padding-left: 16px;
+main {
+    padding-left: 300px;
+    padding-top: 25px;
+
+    form {
+        padding-top: 20px;
+        padding-bottom: 20px;
+
+        /* invalid color */
+        .input-field input[type=text].invalid {
+            border-bottom: 1px solid red;
+            box-shadow: 0 1px 0 0 red;
+        }
+    }
+
+    #addProduct {
+        padding: 0.5rem;
+        margin-bottom: 2rem;
+
+        .row:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .grid-link {
+        cursor: pointer;
+        user-select: none;
+    }
 }
 
-.extra-content-wrapper {
-    padding: 10px;
-}
+@media only screen and (max-width: 992px) {
+    header, main, footer {
+        padding-left: 0;
+    }
 
-#extra-wide-content {
-    width: 200vw;
-}
+    nav .nav-wrapper {
+        text-align:center;
+    }
 
-#extra-tall-content {
-    height: 200vh;
+    .container {
+        width: 95%;
+    }
 }

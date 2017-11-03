@@ -4,11 +4,23 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const path = require('path');
+const glob = require('glob');
 const webpack = require('webpack');
 
 module.exports = function (env) {
 
     //var isProd = env.NODE_ENV === 'production';
+    const CSS_LOADER_CONFIG = [
+        {
+            loader: 'css-loader'
+        },
+        {
+            loader: 'sass-loader',
+            options: {
+                sourceMap: true
+            },
+        }
+    ];
 
     var config = {
         entry: {
@@ -44,8 +56,7 @@ module.exports = function (env) {
                 $: 'jquery',
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery',
-                Popper: ['popper.js', 'default'],
-                'mdc': 'material-components-web'
+                Popper: ['popper.js', 'default']
             }),
             new ExtractTextPlugin('../css/[name].css')
         ],
@@ -53,30 +64,31 @@ module.exports = function (env) {
         module: {
             rules: [
                 {
-                    test: /\.css$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: "style-loader",
-                        use: "css-loader"
-                    })
-                },
-                {
-                    test: /\.scss$/,
+                    test: /(\.css|\.scss|\.sass)$/,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
-                        use: ['css-loader', 'sass-loader']
+                        use: CSS_LOADER_CONFIG,
                     })
                 },
                 {
                     test: /\.(png|svg|jpg|gif)$/,
-                    use: [
-                        'file-loader'
-                    ]
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: '../assets/'
+                        }
+                    }]
                 },
                 {
                     test: /\.(woff|woff2|eot|ttf|otf)$/,
-                    use: [
-                        'file-loader'
-                    ]
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: '../assets/'
+                        }
+                    }]
                 }
             ]
         }

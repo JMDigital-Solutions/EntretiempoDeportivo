@@ -1,27 +1,62 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using EntretiempoDeportivo.StoreManager.Models;
+using System.Collections.Generic;
+using EntretiempoDeportivo.CrossCuttingLayer.Enums;
+using EntretiempoDeportivo.StoreManager.ViewComponents;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace EntretiempoDeportivo.StoreManager.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private InvoiceViewModel _saleViewModel;
+
+        public InvoiceViewModel SaleViewModel
         {
-            return View();
+            get { return _saleViewModel; }
+            set { _saleViewModel = value; }
         }
 
-        public IActionResult About()
+        public HomeController(IMemoryCache memCache)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            SaleViewModel = new InvoiceViewModel(memCache);
         }
 
-        public IActionResult Contact()
+        public IActionResult Sell()
         {
-            ViewData["Message"] = "Your contact page.";
+            return View(SaleViewModel);
+        }
 
+        [HttpPost]
+        public IActionResult AddProductToSale(InvoiceProductViewModel product)
+        {
+            var productId = 0;
+            if (SaleViewModel.Products.Count > 0)
+                productId = SaleViewModel.Products.Max(p => p.Id) + 1;
+
+            product.Id = productId;
+            SaleViewModel.AddProducts(product);
+
+            return ViewComponent(nameof(InvoiceProductList), new { SaleViewModel });
+        }
+
+        [HttpDelete]
+        public IActionResult RemoveProductFromSale(int productId)
+        {
+            var product = SaleViewModel.Products.Where(p => p.Id == Convert.ToInt32(productId)).FirstOrDefault();
+
+            if(product != null)
+                SaleViewModel.Products.Remove(product);
+
+            return ViewComponent(nameof(InvoiceProductList), new { SaleViewModel });
+        }
+
+        public  IActionResult Refunds()
+        {
             return View();
         }
 

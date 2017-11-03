@@ -1,33 +1,42 @@
-/* Ensure layout covers the entire screen. */
 html {
   height: 100%; }
 
-/* Stack toolbar and content on top of each other. */
-.demo-body {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  min-height: 100%; }
+.container {
+  width: 90%; }
 
-/* Place drawer and main next to each other. */
-.demo-content {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  box-sizing: border-box; }
+header {
+  padding-left: 300px; }
+  header nav.top-nav {
+    height: 122px; }
+    header nav.top-nav a.page-title {
+      line-height: 122px;
+      font-size: 48px; }
 
-.demo-main {
-  padding-left: 16px; }
+main {
+  padding-left: 300px;
+  padding-top: 25px; }
+  main form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /* invalid color */ }
+    main form .input-field input[type=text].invalid {
+      border-bottom: 1px solid red;
+      box-shadow: 0 1px 0 0 red; }
+  main #addProduct {
+    padding: 0.5rem;
+    margin-bottom: 2rem; }
+    main #addProduct .row:last-child {
+      margin-bottom: 0; }
+  main .grid-link {
+    cursor: pointer;
+    user-select: none; }
 
-.extra-content-wrapper {
-  padding: 10px; }
-
-#extra-wide-content {
-  width: 200vw; }
-
-#extra-tall-content {
-  height: 200vh; }
+@media only screen and (max-width: 992px) {
+  header, main, footer {
+    padding-left: 0; }
+  nav .nav-wrapper {
+    text-align: center; }
+  .container {
+    width: 95%; } }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiIuLi9jc3Mvc2l0ZS5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/

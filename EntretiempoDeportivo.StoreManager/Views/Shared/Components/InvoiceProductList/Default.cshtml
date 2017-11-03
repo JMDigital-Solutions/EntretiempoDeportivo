@@ -1,0 +1,63 @@
+﻿@model EntretiempoDeportivo.StoreManager.Models.InvoiceViewModel
+@using EntretiempoDeportivo.CrossCuttingLayer.Enums
+
+<table class="bordered highlight responsive-table">
+    <thead>
+        <tr>
+            <th hidden aria-hidden="true">Id</th>
+            <th>Art&iacute;culo</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var product in Model.Products)
+            {
+            <tr class="hoverable">
+                <td hidden aria-hidden="true">@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.UnitPrice</td>
+                <td>
+                    <a class="grid-link" onclick="SellingScripts.removeItemFromSale(@product.Id);"><i class="material-icons" aria-hidden="true" title="Eliminar">delete</i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="right">
+    <p id="lblTotal">Total: <b>$ @Model.Total</b></p>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        <button class="btn waves-effect waves-light modal-trigger" type="button" name="confirmSale" href="#modal" onclick="SellingScripts.openConfirmSaleModal(@Model.Total)">
+            Confirmar Venta<i class="material-icons right">send</i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <h5>Confirmar venta</h5>
+        <hr />
+        <br />
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="txtTotalPrice" type="text" name="Total" readonly>
+                <label for="txtTotalPrice">Total</label>
+            </div>
+            <div class="input-field col s6">
+                <select asp-for="PaymentMethod" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
+                <label>Forma de pago</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+    </div>
+</div>

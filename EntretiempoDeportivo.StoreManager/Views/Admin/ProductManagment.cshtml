@@ -1,0 +1,5 @@
+﻿@{
+    ViewData["PageTitle"] = "Administración de Artículos";
+}
+
+@await Component.InvokeAsync(nameof(ProductList), new { emptyList = false })

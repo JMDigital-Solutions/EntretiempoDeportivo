@@ -1,0 +1,33 @@
+﻿@model IList<EntretiempoDeportivo.StoreManager.Models.ProductViewModel>
+
+<table class="bordered highlight responsive-table">
+    <thead>
+        <tr>
+            <th>Art&iacute;culo</th>
+            <th>Tipo de art&iacute;culo</th>
+            <th>G&eacute;nero</th>
+            <th>Talle</th>
+            <th>Precio unitario</th>
+            <th>Stock disponible</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var product in Model)
+            {
+            <tr class="hoverable">
+                <td>@product.Name</td>
+                <td>@product.Type</td>
+                <td>@product.Gender</td>
+                <td>@product.Size</td>
+                <td>@product.UnitPrice</td>
+                <td>@product.AvailableStock</td>
+                <td>
+                    <a><i class="material-icons" aria-hidden="true" title="Editar">mode_edit</i></a>
+                    <a><i class="material-icons" aria-hidden="true" title="Eliminar">delete</i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
