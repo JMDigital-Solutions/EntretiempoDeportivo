@@ -39,6 +39,13 @@ module.exports = function (env) {
             extensions: ['.js']
         },
 
+        resolve: {
+            modules: [
+                './Scripts/modules',
+                './node_modules'
+            ]
+        },
+
         devtool: 'inline-source-map',
 
         output: {
@@ -63,6 +70,16 @@ module.exports = function (env) {
 
         module: {
             rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['env']
+                        }
+                    }
+                },
                 {
                     test: /(\.css|\.scss|\.sass)$/,
                     use: ExtractTextPlugin.extract({

@@ -1,67 +1,66 @@
-﻿(function () {
-    'use strict';
+﻿import SharedModule from 'SharedModule';
+import SellingModule from 'SellingModule';
 
-    var initMaterialControls = () => {
-        $(".button-collapse").sideNav();
-        $('select').material_select();
-        $('.modal').modal();
-    }
-
-    $(document).ready(function () {
-        initMaterialControls();
-        var SellingScripts = {};
-    })
-
-})();
-
-SellingScripts = (function () {
+(function () {
+    var sharedModule = new SharedModule();
+    var sellingModule = new SellingModule();
 
     var $frmAddProduct = $('#frmAddProduct');
     var $btnAddProductToSale = $('#btnAddProduct');
     var $txtProductName = $('#txtProductName');
+    var $frmFinalSale = $('#frmFinalSale');
+    var $deleteLinks = $('.delete-link');
+    var $btnConfirmSaleModal = $('#btnConfirmSaleModal');
 
-    addProductToFinalSale = function (e) {
+    $btnAddProductToSale.on('click', function (e) {
+        e.preventDefault();
+        sellingModule.addProductToFinalSale($frmAddProduct, function (response) {
+            $frmFinalSale.html(response);
+            sharedModule.init();
+            $frmAddProduct[0].reset();
+            $txtProductName.focus();
+        });
+
+        return false;
+    });
+
+    $btnConfirmSaleModal.on('click', function (e) {
         e.preventDefault();
 
         $.ajax({
-            url: '/Home/AddProductToSale',
+            url: '/Home/ConfirmSale',
             type: "POST",
-            data: $frmAddProduct.serialize(),
+            data: $frmFinalSale.serialize(),
             success: function (data) {
-                $('#product-list').html(data);
-                $frmAddProduct[0].reset();
-                $txtProductName.focus();
+                console.log(data);
+                $frmFinalSale.html(data);
             },
             error: function (response) { console.log(response) }
         });
 
-        return false;
-    }
+    })
 
-    removeItemFromSale = function (productId) {
-        
-        $.ajax({
-            url: '/Home/RemoveProductFromSale',
-            type: "DELETE",
-            data: { productId: productId },
-            success: function (data) {
-                $('#product-list').html(data);
-                $txtProductName.focus();
-            },
-            error: function (response) { console.log(response) }
-        });
+    window.removeItemFromSale = (productId) => {
+        sellingModule.removeItemFromSale(productId, function (response) {
+            $frmFinalSale.html(response);
+            sharedModule.init();
+            $txtProductName.focus();
+        })
 
         return false;
     }
 
-    openConfirmSaleModal = function (total) {
-        $txtTotalPrice = $('#txtTotalPrice');
+    window.openConfirmSaleModal = (total) => {
+        var $txtTotalPrice = $('#txtTotalPrice');
 
         $('.modal').modal({
             dismissible: false,
             ready: function (modal, trigger) {
-                $txtTotalPrice.val('$ ' + total);
+                $txtTotalPrice.val(total);
                 $txtTotalPrice.focus();
+            },
+            complete: function () {
+                $txtProductName.focus();
             }
         })
     }

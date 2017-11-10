@@ -58,6 +58,15 @@ namespace EntretiempoDeportivo.StoreManager.Models
             }
         }
 
+        public void Clear()
+        {
+            Id = 0;
+            PaymentMethod = 0;
+            Total = 0;
+            Products.Clear();
+            _memCache.Remove(CacheKeys.InvoiceProductList);
+        }
+
         #endregion
 
         #region Private Methods

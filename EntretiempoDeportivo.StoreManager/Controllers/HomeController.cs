@@ -13,46 +13,60 @@ namespace EntretiempoDeportivo.StoreManager.Controllers
 {
     public class HomeController : Controller
     {
-        private InvoiceViewModel _saleViewModel;
+        private InvoiceViewModel _invoiceViewModel;
 
-        public InvoiceViewModel SaleViewModel
+        public InvoiceViewModel InvoiceViewModel
         {
-            get { return _saleViewModel; }
-            set { _saleViewModel = value; }
+            get { return _invoiceViewModel; }
+            set { _invoiceViewModel = value; }
         }
 
         public HomeController(IMemoryCache memCache)
         {
-            SaleViewModel = new InvoiceViewModel(memCache);
+            InvoiceViewModel = new InvoiceViewModel(memCache);
         }
 
         public IActionResult Sell()
         {
-            return View(SaleViewModel);
+            return View(InvoiceViewModel);
         }
 
         [HttpPost]
         public IActionResult AddProductToSale(InvoiceProductViewModel product)
         {
             var productId = 0;
-            if (SaleViewModel.Products.Count > 0)
-                productId = SaleViewModel.Products.Max(p => p.Id) + 1;
+            if (InvoiceViewModel.Products.Count > 0)
+                productId = InvoiceViewModel.Products.Max(p => p.Id) + 1;
 
             product.Id = productId;
-            SaleViewModel.AddProducts(product);
+            InvoiceViewModel.AddProducts(product);
 
-            return ViewComponent(nameof(InvoiceProductList), new { SaleViewModel });
+            return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmSale(double totalSale, PaymentMethod paymentMethod)
+        {
+            try
+            {
+                InvoiceViewModel.Clear();
+                return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Sell));
+            }
         }
 
         [HttpDelete]
         public IActionResult RemoveProductFromSale(int productId)
         {
-            var product = SaleViewModel.Products.Where(p => p.Id == Convert.ToInt32(productId)).FirstOrDefault();
+            var product = InvoiceViewModel.Products.Where(p => p.Id == Convert.ToInt32(productId)).FirstOrDefault();
 
             if(product != null)
-                SaleViewModel.Products.Remove(product);
+                InvoiceViewModel.Products.Remove(product);
 
-            return ViewComponent(nameof(InvoiceProductList), new { SaleViewModel });
+            return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
         }
 
         public  IActionResult Refunds()

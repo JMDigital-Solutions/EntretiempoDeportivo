@@ -6,12 +6,15 @@
     "jquery-validation": "^1.17.0",
     "jquery-validation-unobtrusive": "^3.2.6",
     "materialize-css": "^0.100.2",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.6.0",
     "popper.js": "^1.12.6",
     "postcss-loader": "^2.0.8"
   },
   "description": "Aplicacion para manejo de stock y ventas",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "clean-webpack-plugin": "^0.1.17",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
