@@ -6,14 +6,15 @@ import SellingModule from 'SellingModule';
     var sellingModule = new SellingModule();
 
     var $frmAddProduct = $('#frmAddProduct');
-    var $btnAddProductToSale = $('#btnAddProduct');
+    var $btnAddProduct = $('#btnAddProduct');
     var $txtProductName = $('#txtProductName');
     var $frmFinalSale = $('#frmFinalSale');
     var $deleteLinks = $('.delete-link');
     var $btnConfirmSaleModal = $('#btnConfirmSaleModal');
 
-    $btnAddProductToSale.on('click', function (e) {
+    $frmAddProduct.on('submit', function (e) {
         e.preventDefault();
+
         sellingModule.addProductToFinalSale($frmAddProduct, function (response) {
             $frmFinalSale.html(response);
             sharedModule.init();
@@ -23,22 +24,6 @@ import SellingModule from 'SellingModule';
 
         return false;
     });
-
-    $btnConfirmSaleModal.on('click', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: '/Home/ConfirmSale',
-            type: "POST",
-            data: $frmFinalSale.serialize(),
-            success: function (data) {
-                console.log(data);
-                $frmFinalSale.html(data);
-            },
-            error: function (response) { console.log(response) }
-        });
-
-    })
 
     window.removeItemFromSale = (productId) => {
         sellingModule.removeItemFromSale(productId, function (response) {

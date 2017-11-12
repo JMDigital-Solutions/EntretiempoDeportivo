@@ -7,7 +7,7 @@
     "jquery-validation-unobtrusive": "^3.2.6",
     "materialize-css": "^0.100.2",
     "node-sass": "^4.6.0",
-    "popper.js": "^1.12.6",
+    "popper.js": "^1.12.7",
     "postcss-loader": "^2.0.8"
   },
   "description": "Aplicacion para manejo de stock y ventas",

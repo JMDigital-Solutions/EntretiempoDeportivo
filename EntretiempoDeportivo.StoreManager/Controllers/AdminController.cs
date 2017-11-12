@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using EntretiempoDeportivo.StoreManager.Models;
-using EntretiempoDeportivo.CrossCuttingLayer.Enums;
-using EntretiempoDeportivo.StoreManager.ViewComponents;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace EntretiempoDeportivo.StoreManager.Controllers
 {

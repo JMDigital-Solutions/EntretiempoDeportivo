@@ -1,26 +1,20 @@
 ﻿using EntretiempoDeportivo.StoreManager.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EntretiempoDeportivo.StoreManager.ViewComponents
 {
-    public class InvoiceProductList : ViewComponent
+    public class FinalInvoice : ViewComponent
     {
         private InvoiceViewModel _invoiceProducts;
-        private IMemoryCache _memCache;
 
         public InvoiceViewModel InvoiceProducts
         {
             get { return _invoiceProducts; }
         }
 
-        public InvoiceProductList(IMemoryCache memCache)
+        public FinalInvoice()
         {
-            _memCache = memCache;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(InvoiceViewModel invoice)
@@ -36,7 +30,7 @@ namespace EntretiempoDeportivo.StoreManager.ViewComponents
             }
             else
             {
-                _invoiceProducts = new InvoiceViewModel(this._memCache);
+                _invoiceProducts = new InvoiceViewModel();
                 return View(InvoiceProducts);
             }            
         }

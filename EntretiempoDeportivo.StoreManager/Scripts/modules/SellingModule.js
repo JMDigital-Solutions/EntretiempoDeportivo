@@ -13,7 +13,9 @@ export default class SellingModule {
             success: function (data) {
                 callbackFunc(data);
             },
-            error: function (response) { console.log(response) }
+            error: function (response) {
+                console.log(response)
+            }
         });
     }
 
@@ -26,7 +28,9 @@ export default class SellingModule {
             success: function (data) {
                 callbackFunc(data);
             },
-            error: function (response) { console.log(response) }
+            error: function (response) {
+                console.log(response)
+            }
         });
     }
 };

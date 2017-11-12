@@ -1,72 +1,82 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using EntretiempoDeportivo.StoreManager.Models;
-using System.Collections.Generic;
-using EntretiempoDeportivo.CrossCuttingLayer.Enums;
 using EntretiempoDeportivo.StoreManager.ViewComponents;
-using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using EntretiempoDeportivo.CrossCuttingLayer.Constants;
 
 namespace EntretiempoDeportivo.StoreManager.Controllers
 {
     public class HomeController : Controller
     {
-        private InvoiceViewModel _invoiceViewModel;
+        private readonly IMemoryCache _memoryCache;
 
-        public InvoiceViewModel InvoiceViewModel
+        private InvoiceViewModel _invoice;
+
+        public InvoiceViewModel Invoice
         {
-            get { return _invoiceViewModel; }
-            set { _invoiceViewModel = value; }
+            get {
+                if (!_memoryCache.TryGetValue(CacheKeys.InvoiceProductList, out _invoice))
+                {
+                    _invoice = new InvoiceViewModel();
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+                    _memoryCache.Set(CacheKeys.InvoiceProductList, _invoice, cacheEntryOptions);
+                }
+
+                return _invoice;
+            }
+            set {
+                if (value != null)
+                    _invoice = value;
+            }
         }
 
-        public HomeController(IMemoryCache memCache)
+
+        public HomeController(IMemoryCache memoryCache)
         {
-            InvoiceViewModel = new InvoiceViewModel(memCache);
+            _memoryCache = memoryCache;
         }
 
         public IActionResult Sell()
         {
-            return View(InvoiceViewModel);
+            return View(Invoice);
         }
 
         [HttpPost]
-        public IActionResult AddProductToSale(InvoiceProductViewModel product)
+        public IActionResult AddProductToSale([FromForm]InvoiceProductViewModel product)
         {
             var productId = 0;
-            if (InvoiceViewModel.Products.Count > 0)
-                productId = InvoiceViewModel.Products.Max(p => p.Id) + 1;
+            if (Invoice.Products.Count > 0)
+                productId = Invoice.Products.Max(p => p.Id) + 1;
 
             product.Id = productId;
-            InvoiceViewModel.AddProducts(product);
+            Invoice.AddProducts(product);
 
-            return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
+            return ViewComponent(nameof(FinalInvoice), new { invoice = Invoice });
         }
 
         [HttpPost]
-        public IActionResult ConfirmSale(double totalSale, PaymentMethod paymentMethod)
+        public IActionResult ConfirmSale([FromForm]InvoiceViewModel invoice)
         {
-            try
-            {
-                InvoiceViewModel.Clear();
-                return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Sell));
-            }
+            _memoryCache.Remove(CacheKeys.InvoiceProductList);
+            Invoice.Products.Clear();
+            return RedirectToAction(nameof(Sell));
         }
 
         [HttpDelete]
         public IActionResult RemoveProductFromSale(int productId)
         {
-            var product = InvoiceViewModel.Products.Where(p => p.Id == Convert.ToInt32(productId)).FirstOrDefault();
+            var product = Invoice.Products.Where(p => p.Id == Convert.ToInt32(productId)).FirstOrDefault();
 
             if(product != null)
-                InvoiceViewModel.Products.Remove(product);
+                Invoice.Products.Remove(product);
 
-            return ViewComponent(nameof(InvoiceProductList), new { InvoiceViewModel });
+            return ViewComponent(nameof(FinalInvoice), new { invoice = Invoice });
         }
 
         public  IActionResult Refunds()
